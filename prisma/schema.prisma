@@ -13,88 +13,120 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ユーザーモデル
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          Role      @default(USER)
-  reservations  Reservation[]
-  reviews       Review[]
+  id                Int             @id @default(autoincrement())
+  email             String          @unique
+  name              String?
+  password          String
+  role              String          @default("USER") // USER, ADMIN
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  bookings          Booking[]
+  reviews           Review[]
+  paymentInfo       PaymentInfo[]
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
+// アクティビティモデル
 model Activity {
-  id           String       @id @default(cuid())
-  name         String
-  description  String       @db.Text
-  price        Float
-  duration     Int
-  location     String
-  imageUrl     String?
-  capacity     Int
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  reservations Reservation[]
-  reviews      Review[]
+  id                Int             @id @default(autoincrement())
+  name              String
+  description       String          @db.Text
+  price             Float
+  duration          Int             // 分単位
+  maxParticipants   Int
+  images            ActivityImage[]
+  location          String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  bookings          Booking[]
+  reviews           Review[]
+  availability      Availability[]
 }
 
-model Reservation {
-  id         String   @id @default(cuid())
-  date       DateTime
-  time       String
-  status     ReservationStatus @default(PENDING)
-  persons    Int
-  totalPrice Float
-  userId     String
-  activityId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  paymentId  String?
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+// アクティビティ画像モデル
+model ActivityImage {
+  id                Int             @id @default(autoincrement())
+  url               String
+  activityId        Int
+  activity          Activity        @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  createdAt         DateTime        @default(now())
 }
 
-enum ReservationStatus {
-  PENDING
-  CONFIRMED
-  CANCELED
-  COMPLETED
+// 予約モデル
+model Booking {
+  id                Int             @id @default(autoincrement())
+  userId            Int
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activityId        Int
+  activity          Activity        @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  date              DateTime
+  status            String          @default("PENDING") // PENDING, CONFIRMED, CANCELED
+  participants      Int
+  totalPrice        Float
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  payment           Payment?
 }
 
+// 空き状況モデル
+model Availability {
+  id                Int             @id @default(autoincrement())
+  activityId        Int
+  activity          Activity        @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  date              DateTime
+  availableSpots    Int
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+// レビューモデル
 model Review {
-  id         String   @id @default(cuid())
-  rating     Int
-  comment    String   @db.Text
-  userId     String
-  activityId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  id                Int             @id @default(autoincrement())
+  userId            Int
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activityId        Int
+  activity          Activity        @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  rating            Int
+  comment           String?         @db.Text
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }
 
-model ContactMessage {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  message   String   @db.Text
-  status    ContactStatus @default(UNREAD)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// 問い合わせモデル
+model Contact {
+  id                Int             @id @default(autoincrement())
+  name              String
+  email             String
+  subject           String
+  message           String          @db.Text
+  status            String          @default("NEW") // NEW, RESPONDED
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }
 
-enum ContactStatus {
-  UNREAD
-  READ
-  REPLIED
+// 決済モデル
+model Payment {
+  id                Int             @id @default(autoincrement())
+  bookingId         Int             @unique
+  booking           Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount            Float
+  paymentMethod     String          // CREDIT_CARD, ELECTRONIC_PAYMENT
+  status            String          @default("PENDING") // PENDING, COMPLETED, FAILED
+  transactionId     String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+// 決済情報モデル
+model PaymentInfo {
+  id                Int             @id @default(autoincrement())
+  userId            Int
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type              String          // CREDIT_CARD, ELECTRONIC_PAYMENT
+  lastFour          String?         // クレジットカードの下4桁
+  expiryDate        String?         // MM/YY形式
+  token             String?         // 支払いゲートウェイ用のトークン
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }

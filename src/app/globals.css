@@ -1,103 +1,75 @@
-@import "tailwindcss/preflight";
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
 :root {
-  --primary: #0077b6;
-  --primary-light: #00b4d8;
-  --primary-dark: #023e8a;
-  --secondary: #48cae4;
-  --accent: #ade8f4;
-  --background: #f8f9fa;
-  --text: #1a1a1a;
-  --text-light: #6c757d;
+  --background: #ffffff;
+  --foreground: #171717;
+  --ocean-blue-50: #f0f9ff;
+  --ocean-blue-100: #e0f2fe;
+  --ocean-blue-200: #bae6fd;
+  --ocean-blue-300: #7dd3fc;
+  --ocean-blue-400: #38bdf8;
+  --ocean-blue-500: #0ea5e9;
+  --ocean-blue-600: #0284c7;
+  --ocean-blue-700: #0369a1;
+  --ocean-blue-800: #075985;
+  --ocean-blue-900: #0c4a6e;
+  --ocean-blue-950: #082f49;
 }
 
-body {
-  color: var(--text);
-  background-color: var(--background);
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
-h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin-bottom: 1.5rem;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 }
 
-h2 {
-  font-size: 1.875rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin-bottom: 1rem;
+@layer base {
+  body {
+    @apply bg-white text-gray-900;
+    font-family: "Noto Sans JP", Arial, Helvetica, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold text-ocean-blue-800;
+  }
 }
 
-h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary);
-  margin-bottom: 0.75rem;
-}
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
 
-p {
-  margin-bottom: 1rem;
-}
+  .btn-primary {
+    @apply bg-ocean-blue-600 hover:bg-ocean-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-ocean-blue-400 focus:ring-offset-2;
+  }
 
-.btn-primary {
-  background-color: var(--primary);
-  color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.375rem;
-  transition-property: background-color;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-100 text-ocean-blue-600 font-medium py-2 px-6 rounded-md transition-colors shadow-sm border border-ocean-blue-200 focus:outline-none focus:ring-2 focus:ring-ocean-blue-400 focus:ring-offset-2;
+  }
 
-.btn-primary:hover {
-  background-color: var(--primary-dark);
-}
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-300 focus:border-ocean-blue-300;
+  }
 
-.btn-secondary {
-  background-color: var(--secondary);
-  color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.375rem;
-  transition-property: background-color;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
+  .section-heading {
+    @apply text-3xl font-bold mb-6 text-ocean-blue-800;
+  }
 
-.btn-secondary:hover {
-  background-color: var(--primary-light);
-}
-
-.btn-outline {
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.375rem;
-  transition-property: background-color, color;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.btn-outline:hover {
-  background-color: var(--primary);
-  color: white;
-}
-
-.card {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  padding: 1.5rem;
-}
-
-.container-custom {
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  .section {
+    @apply py-12 md:py-20;
+  }
 }

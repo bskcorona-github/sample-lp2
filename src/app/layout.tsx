@@ -1,17 +1,22 @@
+import React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const notoSansJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-noto-sans-jp",
+});
 
 export const metadata: Metadata = {
-  title: "サンプルサイト２ | 沖縄マリンアクティビティ",
+  title: "沖縄マリンアクティビティ | 最高の海体験を提供",
   description:
-    "沖縄の美しい海でマリンアクティビティを楽しみませんか？ダイビング、シュノーケリング、ジェットスキーなど様々なアクティビティをご用意しています。",
+    "沖縄の美しい海でダイビング、ジェットスキー、シュノーケリングなどのマリンアクティビティをお楽しみいただけます。初心者から上級者まで安心して体験できるプログラムをご用意しています。",
   keywords:
-    "沖縄, マリンアクティビティ, ダイビング, シュノーケリング, 海遊び, ビーチ, 予約",
+    "沖縄, マリンアクティビティ, ダイビング, ジェットスキー, シュノーケリング, 海, アクティビティ, 予約",
 };
 
 export default function RootLayout({
@@ -21,10 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+      <body className={`${notoSansJP.variable} font-sans antialiased`}>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
