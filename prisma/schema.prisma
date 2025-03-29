@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          Role      @default(USER)
+  reservations  Reservation[]
+  reviews       Review[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Activity {
+  id           String       @id @default(cuid())
+  name         String
+  description  String       @db.Text
+  price        Float
+  duration     Int
+  location     String
+  imageUrl     String?
+  capacity     Int
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  reservations Reservation[]
+  reviews      Review[]
+}
+
+model Reservation {
+  id         String   @id @default(cuid())
+  date       DateTime
+  time       String
+  status     ReservationStatus @default(PENDING)
+  persons    Int
+  totalPrice Float
+  userId     String
+  activityId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  paymentId  String?
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+  COMPLETED
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  rating     Int
+  comment    String   @db.Text
+  userId     String
+  activityId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String   @db.Text
+  status    ContactStatus @default(UNREAD)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ContactStatus {
+  UNREAD
+  READ
+  REPLIED
+}
