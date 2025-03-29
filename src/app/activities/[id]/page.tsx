@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReservationForm from "@/components/reservation/ReservationForm";
 import ReviewList from "@/components/review/ReviewList";

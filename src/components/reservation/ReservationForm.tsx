@@ -8,7 +8,6 @@ import { FaCalendarAlt, FaClock, FaUser, FaYenSign } from "react-icons/fa";
 
 interface ReservationFormProps {
   activityId: string;
-  activityName: string;
   price: number;
   capacity: number;
 }
@@ -26,7 +25,6 @@ const timeSlots = [
 
 const ReservationForm = ({
   activityId,
-  activityName,
   price,
   capacity,
 }: ReservationFormProps) => {

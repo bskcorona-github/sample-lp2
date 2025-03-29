@@ -1,12 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
 import { FaCalendarAlt, FaStar, FaComments, FaWater } from "react-icons/fa";
-
-// 画像パスを変更
-const heroImage = "/images/placeholder-hero.jpg";
-const activityImage1 = "/images/placeholder-activity-1.jpg";
-const activityImage2 = "/images/placeholder-activity-2.jpg";
-const activityImage3 = "/images/placeholder-activity-3.jpg";
 
 export default function Home() {
   return (
