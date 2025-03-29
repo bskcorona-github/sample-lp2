@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import ReservationForm from "@/components/reservation/ReservationForm";
-import ReviewList from "@/components/review/ReviewList";
+// ReviewListコンポーネントを一時的に除外
 
 // 仮のデータを用意
 const activities = [
@@ -124,11 +124,13 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-export default function ActivityDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface ActivityPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function ActivityDetailPage({ params }: ActivityPageProps) {
   const activity = activities.find((a) => a.id === params.id);
 
   if (!activity) {
@@ -183,7 +185,13 @@ export default function ActivityDetailPage({
             </div>
           </div>
 
-          <ReviewList activityId={activity.id} />
+          {/* ReviewListコンポーネントを一時的にコメントアウト */}
+          <div className="card">
+            <h2 className="text-2xl font-semibold mb-4">お客様の声</h2>
+            <p className="text-text-light">
+              準備中です。しばらくお待ちください。
+            </p>
+          </div>
         </div>
 
         <div className="lg:col-span-1">
@@ -198,7 +206,6 @@ export default function ActivityDetailPage({
 
             <ReservationForm
               activityId={activity.id}
-              activityName={activity.name}
               price={activity.price}
               capacity={activity.capacity}
             />

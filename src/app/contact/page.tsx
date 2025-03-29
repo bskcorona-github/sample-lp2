@@ -1,5 +1,5 @@
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import ContactForm from "@/components/contact/ContactForm";
+// ContactFormコンポーネントを一時的に除外
 
 export const metadata = {
   title: "お問い合わせ | サンプルサイト２",
@@ -22,7 +22,12 @@ export default function ContactPage() {
         <div className="lg:col-span-2">
           <div className="card">
             <h2 className="text-2xl font-semibold mb-6">メッセージを送る</h2>
-            <ContactForm />
+            {/* ContactFormコンポーネントを一時的にコメントアウト */}
+            <p className="text-text-light">
+              お問い合わせフォームは現在準備中です。
+              <br />
+              右側のお問い合わせ先からご連絡ください。
+            </p>
           </div>
         </div>
 
